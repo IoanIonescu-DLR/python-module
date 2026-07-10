@@ -334,7 +334,7 @@ GtPythonModule::upgradeRoutines() const
 {
     return {
 #if GT_VERSION >= GT_VERSION_CHECK(2, 1, 0)
-                gt::VersionUpgradeRoutine {GtVersionNumber(2, 0, 0),
+                gt::VersionUpgradeRoutine {GtVersionNumber(1, 8, 2),
                                           &gtpy::module_upgrader::to_2_0_0::run}
 #endif
     };
