@@ -345,14 +345,17 @@ foreach(qtlib ${qt_required_components})
   target_link_libraries(PythonQt PRIVATE Qt${PythonQt_QT_VERSION}::${qtlib})
 endforeach()
 
-find_package(Qt${QT_VERSION_MAJOR}CorePrivate CONFIG REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR}CorePrivate CONFIG QUIET)
 
 target_link_libraries(PythonQt PUBLIC
-            Python3::Python
-            PRIVATE
+            Python3::Python)
+
+if(TARGET Qt${QT_VERSION_MAJOR}::CorePrivate)
+  target_link_libraries(PythonQt PRIVATE
             # Required for use of "QtCore/private/qmetaobjectbuilder_p.h" in "PythonQt.cpp"
             Qt${QT_VERSION_MAJOR}::CorePrivate
-)
+  )
+endif()
 
 #-----------------------------------------------------------------------------
 # Install library (on windows, put the dll in 'bin' and the archive in 'lib')
