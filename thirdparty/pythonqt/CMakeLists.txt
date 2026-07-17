@@ -345,7 +345,9 @@ foreach(qtlib ${qt_required_components})
   target_link_libraries(PythonQt PRIVATE Qt${PythonQt_QT_VERSION}::${qtlib})
 endforeach()
 
-find_package(Qt${QT_VERSION_MAJOR}CorePrivate CONFIG REQUIRED)
+if(NOT TARGET Qt${QT_VERSION_MAJOR}::CorePrivate)
+  find_package(Qt${QT_VERSION_MAJOR}CorePrivate CONFIG REQUIRED)
+endif()
 
 target_link_libraries(PythonQt PUBLIC
             Python3::Python
