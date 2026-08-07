@@ -258,9 +258,12 @@ write_basic_package_version_file(
   COMPATIBILITY AnyNewerVersion
 )
 
-file(GENERATE
-  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/GTlabPythonConfig.cmake"
-  INPUT  "${PROJECT_SOURCE_DIR}/cmake/GTlabPythonConfig.in"
+configure_package_config_file(
+  "${PROJECT_SOURCE_DIR}/cmake/GTlabPythonConfig.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/GTlabPythonConfig.cmake"
+  INSTALL_DESTINATION "${CONFIG_INSTALL_DIR}"
+  NO_SET_AND_CHECK_MACRO
+  NO_CHECK_REQUIRED_COMPONENTS_MACRO
 )
 
 install(EXPORT  GTlabPython-targets
@@ -273,4 +276,3 @@ install (FILES
   DESTINATION ${CONFIG_INSTALL_DIR})
 
 ######################################################################
-
