@@ -37,9 +37,8 @@ public:
     explicit GtpsPythonInterpreter(const QString& pythonExe);
 
     /**
-     * @brief Returns true if the Python executalbe is valid and the evaluator
-     * can execute Python code. Otherwise it returns false.
-     * @return True, if the evaluator can execute Python code.
+     * @brief Queries the interpreter and caches its environment prefix.
+     * @return True if Python runs and reports an existing absolute prefix.
      */
     bool isValid();
 
@@ -63,8 +62,8 @@ public:
     const QStringList& sysPaths() const;
 
     /**
-     * @brief Retruns the PYTHONHOME path.
-     * @return The PYTHONHOME path.
+     * @brief Returns the environment prefix reported by the interpreter.
+     * @return The PYTHONHOME path, or an empty string if validation failed.
      */
     QString pythonHomePath() const;
 
@@ -109,6 +108,9 @@ private:
 
     // Python executalbe.
     QString m_pythonExe{};
+
+    // Validated environment prefix reported by the selected interpreter.
+    QString m_pythonHome{};
 
     // Shared python library
     QString m_sharedLib{};

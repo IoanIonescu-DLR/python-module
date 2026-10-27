@@ -104,7 +104,14 @@ bool
 GtpsPythonInterpreter::isValid()
 {
     bool ok{false};
-    runCommand("import sys", &ok);
+    // Explicit UTF-8 also works with Windows' locale-encoded redirected stdout.
+    const auto prefix = runCommand(
+        "import sys; sys.stdout.buffer.write(sys.prefix.encode('utf-8'))", &ok);
+    const QFileInfo home(prefix);
+    ok = ok && !prefix.isEmpty() && home.isAbsolute() && home.isDir();
+    // Python's environment root is not necessarily the executable directory
+    // (for example, Unix environments place the executable in <prefix>/bin).
+    m_pythonHome = ok ? QDir::toNativeSeparators(prefix) : QString{};
     m_status = ok ? Status::Valid : Status::Invalid;
     return ok;
 }
@@ -130,7 +137,7 @@ GtpsPythonInterpreter::sysPaths() const
 QString
 GtpsPythonInterpreter::pythonHomePath() const
 {
-    return QDir::toNativeSeparators(QFileInfo(m_pythonExe).absolutePath());
+    return m_pythonHome;
 }
 
 void
