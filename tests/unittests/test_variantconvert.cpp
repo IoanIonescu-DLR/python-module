@@ -77,15 +77,16 @@ TEST(VariantConvert, addVariableObject)
     // Add gtobject to python as name "obj3"
     MyObject o;
     o.setObjectName("Object3");
-    ctxMgr->addVariable(context.id(), "obj3", QVariant::fromValue(&o));
 
-    // register the class so PythonQt can convert the Python object to a
-    // QVariant in PythonQtConv::PyObjToQVariant()
+    // Register before QVariant -> Python conversion. Otherwise a fresh
+    // process treats MyObject* as an opaque C++ pointer; registration by
+    // an earlier test must not be required for the QObject round trip.
     PythonQt::self()->registerClass(o.metaObject());
+    ASSERT_TRUE(ctxMgr->addVariable(context.id(), "obj3", QVariant::fromValue(&o)));
 
     // get back the object from python
     auto objPtr = ctxMgr->getVariable(context.id(), "obj3").value<GtObject*>();
-    ASSERT_TRUE(objPtr != nullptr);
+    ASSERT_EQ(static_cast<GtObject*>(&o), objPtr);
 
     EXPECT_EQ("Object3", objPtr->objectName());
 }
