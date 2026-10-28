@@ -286,8 +286,8 @@ TEST(TestCodegenUtilities, TestPyPropValue)
     code = gtpy::codegen::pyPropValue(&boolProp);
     EXPECT_EQ(code.toStdString(), R"(False)");
 
-    // init datamodel to test object link property
-    MyCoreDataModel{};
+    // Keep the singleton's model alive while resolving the object link below.
+    MyCoreDataModel dataModel{};
 
     GtObjectLinkProperty objLinkProp{"obj link prop", "name", "brief", nullptr,
                                      QStringList{} << GT_CLASSNAME(GtObject),
